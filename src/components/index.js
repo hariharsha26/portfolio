@@ -1,5 +1,7 @@
 import Navbar from "#components/Navbar";
 import Welcome from "#components/Welcome";
 import Dock from "#components/Dock";   
+import WindowControl from "./WindowControl";
 
-export { Navbar, Welcome , Dock};
+
+export { Navbar, Welcome , Dock , WindowControl};
