@@ -7,7 +7,8 @@ import Draggable from "gsap/Draggable";
 const WindowWrapper = (Component, windowKey) => {
   const Wrapped = (props) => {
     const { focusWindow, windows } = useWindowStore();
-    const { isOpen, zIndex } = windows[windowKey];
+    const entry = windows[windowKey] || {};
+    const { isOpen, zIndex } = entry;
 
     const ref = useRef(null);
     const isMountedRef = useRef(false);
@@ -28,7 +29,7 @@ const WindowWrapper = (Component, windowKey) => {
 
     useGSAP(() => {
       const el = ref.current;
-      if (!el) return;
+      if (!el || !entry || isOpen === undefined) return;
 
       if (isOpen) {
         el.style.display = "block";
