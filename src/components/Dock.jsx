@@ -7,7 +7,7 @@ import useWindowStore from '../../store/window.js'
 
 const Dock = () => {
 
-    const { openWindow, closeWindow, focusWindow, windows } = useWindowStore()
+    const { openWindow, closeWindow, windows } = useWindowStore()
     const dockRef = useRef(null)
 
     useGSAP(() => {
@@ -41,7 +41,7 @@ const Dock = () => {
 
         const resetIcons = () => 
             icons.forEach((icon) => 
-            gsap.to(icons, {
+            gsap.to(icon, {
                 scale: 1,
                 y: 0,
                 duration: 0.3,
