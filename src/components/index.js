@@ -1,6 +1,6 @@
-import Navbar from "#components/Navbar";
-import Welcome from "#components/Welcome";
-import Dock from "#components/Dock";   
+import Navbar from "./Navbar";
+import Welcome from "./Welcome";
+import Dock from "./Dock";   
 import WindowControl from "./WindowControl";
 
 

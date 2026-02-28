@@ -3,10 +3,16 @@
 @import "tailwindcss";
 
 html,
-body {
-  width: 100dvw;
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
-  height: 100dvh;
+}
+
+body {
   background-image: url("/images/wallpaper.png");
   background-size: cover;
   background-repeat: no-repeat;
@@ -33,18 +39,14 @@ body {
 
 @layer base {
   main {
-    @apply w-dvw h-dvh overflow-hidden;
+    @apply w-full h-full overflow-hidden relative;
   }
 
   nav {
-    @apply flex justify-between items-center bg-white/50 backdrop-blur-3xl p-2 px-5 select-none;
+    @apply flex justify-between items-center bg-white/50 backdrop-blur-3xl p-2 px-5 select-none z-[10000] sticky top-0;
 
     div {
       @apply flex items-center max-sm:w-full max-sm:justify-center gap-5;
-
-      &:last-child {
-        @apply max-sm:hidden;
-      }
     }
 
     ul {
@@ -63,334 +65,182 @@ body {
 
 @layer components {
   .icon {
-    @apply p-1 hover:bg-gray-200 rounded hover:cursor-default;
+    @apply p-1.5 hover:bg-black/5 rounded-lg cursor-pointer transition-all duration-200 active:scale-95;
+  }
+
+  /* Universal Window Styling to prevent flash */
+  .window-node {
+    display: none;
+    opacity: 0;
+    will-change: transform, opacity;
   }
 
   #welcome {
-    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
-
-    .small-screen {
-      @apply sm:hidden m-7 bg-red-300/20 backdrop-blur-lg p-3 rounded-md absolute top-10;
-
-      p {
-        @apply flex-1 text-[16px] text-center font-roboto text-gray-400;
-      }
-    }
+    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10 z-[1];
   }
 
   #dock {
-    @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none max-sm:hidden;
+    @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-[10001] select-none max-sm:hidden;
 
     .dock-container {
-      @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
+      @apply bg-white/25 backdrop-blur-xl border border-white/20 shadow-2xl justify-between rounded-[22px] p-2 flex items-end gap-2;
     }
 
     .tooltip {
-      @apply !py-1 !px-3 !w-fit !text-center !text-xs !rounded-md !bg-blue-200 !text-blue-900 !shadow-2xl;
+      @apply !py-1 !px-3 !w-fit !text-center !text-xs !rounded-md !bg-white/80 !backdrop-blur-md !text-black !shadow-xl !font-medium !mb-4;
     }
 
     .dock-icon {
-      @apply size-14 3xl:size-20 cursor-pointer;
+      @apply size-12 3xl:size-16 cursor-pointer relative;
 
       img {
-        @apply object-cover object-center;
+        @apply w-full h-full object-contain drop-shadow-lg;
+      }
+
+      &::after {
+        content: '';
+        @apply absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1 bg-black/40 rounded-full opacity-0 scale-0 transition-all duration-300;
+      }
+
+      &.open::after {
+        @apply opacity-100 scale-100;
       }
     }
   }
 
   #window-controls {
     @apply flex gap-2;
-
-    .close {
-      @apply size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
-    }
-
-    .minimize {
-      @apply size-3.5 rounded-full bg-[#ffc030];
-    }
-
-    .maximize {
-      @apply size-3.5 rounded-full bg-[#2acb42];
-    }
   }
 
-  #window-header {
-    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
+  .window-header {
+    @apply flex items-center justify-between px-4 py-3 rounded-t-xl bg-gray-50/80 backdrop-blur-md border-b border-gray-200/50 select-none text-[13px] text-gray-500 font-medium z-[10];
   }
 
-  #safari {
-    @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
-
-    .search {
-      @apply flex items-center gap-3 w-2/3 bg-white border border-gray-300 rounded-lg px-3 py-2;
-
-      input {
-        @apply placeholder:text-gray-400;
-      }
-    }
-
-    .blog {
-      @apply bg-white p-10 max-w-3xl mx-auto;
-
-      h2 {
-        @apply text-xl font-bold text-pink-600 mb-10;
-      }
-
-      .blog-post {
-        @apply grid grid-cols-12 space-x-5;
-
-        img {
-          @apply size-full rounded-md object-cover;
-        }
-
-        .content {
-          @apply col-span-10 space-y-3;
-
-          p {
-            @apply text-xs text-gray-500;
-          }
-
-          h3 {
-            @apply font-semibold text-base text-gray-800;
-          }
-
-          a {
-            @apply text-blue-600 text-xs hover:underline flex items-center gap-3;
-          }
-        }
-      }
-    }
-  }
-
-  #terminal {
-    @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+  /* Safari Content Styling */
+  .blog {
+    @apply flex-1 overflow-y-auto p-10;
+    @apply custom-scrollbar;
 
     h2 {
-      @apply font-bold text-sm text-center w-full;
+      @apply text-3xl font-black text-[#ff0080] mb-10 tracking-tight;
     }
 
-    .techstack {
-      @apply text-sm font-roboto p-5;
-
-      .label {
-        @apply flex items-center ms-10 mt-7;
-      }
+    .blog-post {
+      @apply grid grid-cols-12 gap-8 items-center border-b border-gray-100 pb-8 last:border-0;
 
       .content {
-        @apply py-5 my-5 border-y border-dashed space-y-1;
-
-        li {
-          .check {
-            @apply text-[#00A154] w-5;
-          }
-
-          h3 {
-            @apply font-semibold text-[#00A154] w-32 ms-5;
-          }
-
-          ul {
-            @apply flex items-center gap-3;
-          }
-        }
-      }
-
-      .footnote {
-        @apply text-[#00A154] space-y-1;
-
-        p {
-          @apply flex items-center;
-
-          svg {
-            @apply w-5 me-5;
-          }
-        }
+        @apply flex flex-col gap-2;
       }
     }
   }
 
-  #contact {
-    @apply max-w-2xl absolute top-60 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+  /* Terminal Content Styling */
+  .techstack {
+    @apply flex-1 bg-[#ffffff] p-8 font-roboto overflow-y-auto;
+    @apply custom-scrollbar;
 
-    h2 {
-      @apply font-bold text-sm text-center w-full;
+    p {
+      @apply text-[14px] text-gray-800 leading-relaxed;
     }
 
-    h3 {
-      @apply text-xl font-semibold;
-    }
-
-    ul {
-      @apply flex items-center gap-3;
-
-      li {
-        @apply rounded-lg p-3 w-60 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300;
-
-        a {
-          @apply space-y-5;
-        }
-
-        p {
-          @apply font-semibold text-sm text-white;
-        }
-      }
-    }
-  }
-
-  #photos {
-    @apply max-w-3xl absolute top-96 left-1/2 -translate-y-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
-
-    .sidebar {
-      @apply w-3/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-5;
-
-      h2 {
-        @apply text-xs font-medium text-gray-400 mb-1;
-      }
-
-      ul {
-        li {
-          @apply flex space-y-1 items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
-
-          &:first-child {
-            @apply bg-blue-100 text-blue-700;
-          }
-
-          img {
-            @apply w-4;
-          }
-
-          p {
-            @apply text-sm font-medium;
-          }
-        }
-      }
-    }
-
-    .gallery {
-      @apply p-5;
-
-      ul {
-        @apply grid grid-cols-5 grid-rows-5 gap-2.5;
-
-        li {
-          img {
-            @apply size-full object-cover rounded-lg;
-          }
-
-          &:first-child {
-            @apply row-start-1 row-span-3 col-start-1 col-span-3;
-          }
-
-          &:nth-child(2) {
-            @apply row-start-1 row-span-3 col-start-4 col-span-2;
-          }
-
-          &:nth-child(3) {
-            @apply row-start-4 row-span-2 col-start-3 col-span-3;
-          }
-
-          &:last-child {
-            @apply row-start-4 row-span-2 col-start-1 col-span-2;
-          }
-        }
-      }
-    }
-  }
-
-  #resume {
-    @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
-
-    #window-header {
-      h2 {
-        @apply font-bold text-sm text-center flex-1;
-      }
-    }
-  }
-
-  #finder {
-    @apply absolute w-3xl left-40 top-20 shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl;
-
-    .sidebar {
-      @apply w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3;
-
-      h3 {
-        @apply text-xs font-medium text-gray-400 mb-1;
-      }
-
-      ul {
-        @apply space-y-1;
-
-        .active {
-          @apply bg-blue-100 text-blue-700;
-        }
-
-        .not-active {
-          @apply text-gray-700 hover:bg-gray-200;
-        }
-
-        li {
-          @apply flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
-        }
-      }
+    .label {
+      @apply flex gap-10 mt-6 mb-2 text-gray-600 font-bold uppercase text-[11px] tracking-widest border-b border-dashed border-gray-200 pb-4;
     }
 
     .content {
-      @apply flex-1 p-8 bg-white max-w-2xl relative;
+      @apply space-y-2;
 
       li {
-        @apply absolute flex items-center flex-col gap-3;
+        @apply flex items-center gap-6 py-1;
 
-        img {
-          @apply object-contain object-center size-16 relative group-hover:scale-105;
+        h3 {
+          @apply w-24 text-emerald-500 font-bold text-[14px];
         }
 
-        p {
-          @apply text-sm text-center font-medium w-40;
+        ul {
+          @apply flex items-center gap-2 text-[14px] text-gray-700;
+        }
+
+        .check {
+          @apply text-emerald-500;
         }
       }
     }
+
+    .footnote {
+      @apply mt-10 pt-6 border-t border-dashed border-gray-200 flex justify-between items-center text-[12px] text-emerald-600 font-medium;
+    }
   }
 
-  #txtfile {
-    @apply w-md absolute top-36 right-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+  /* Resize Handles */
+  .resizer {
+    @apply absolute bg-transparent z-[1005];
+  }
 
-    h2 {
-      @apply font-bold text-sm text-center w-full;
-    }
+  .resizer-r {
+    @apply top-1 -right-1.5 w-4 h-[calc(100%-8px)] cursor-ew-resize;
+  }
+
+  .resizer-b {
+    @apply -bottom-1.5 left-1 h-4 w-[calc(100%-8px)] cursor-ns-resize;
+  }
+
+  .resizer-rb {
+    @apply -bottom-3 -right-3 w-8 h-8 cursor-nwse-resize z-[1006];
+  }
+
+  .resizer-l {
+    @apply top-1 -left-1.5 w-4 h-[calc(100%-8px)] cursor-ew-resize;
+  }
+
+  .resizer-t {
+    @apply -top-1.5 left-1 h-4 w-[calc(100%-8px)] cursor-ns-resize;
+  }
+
+  /* Window Containers */
+  #photos,
+  #safari,
+  #terminal,
+  #imgfile,
+  #finder,
+  #contact,
+  #resume {
+    @apply bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col z-[1000] absolute;
+  }
+
+  #photos {
+    @apply w-[80vw] h-[75vh] max-w-[1200px] max-h-[800px];
+  }
+
+  #safari {
+    @apply w-[75vw] h-[70vh] max-w-[1000px] max-h-[750px];
+  }
+
+  #terminal {
+    @apply w-[55vw] h-[60vh] max-w-[700px] max-h-[500px];
   }
 
   #imgfile {
-    @apply w-xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-[500px] h-[450px];
+  }
+}
 
-    #window-header {
-      p {
-        @apply font-bold text-[#5f6266];
-      }
-    }
-
-    .preview {
-      @apply p-2 bg-gray-200 max-h-[70vh];
-
-      img {
-        @apply w-full h-fit object-contain object-center;
-      }
-    }
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
   }
 
-  #home {
-    @apply relative z-0 max-sm:hidden;
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-    ul {
-      li {
-        @apply absolute z-0 select-none flex items-center flex-col;
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 3px solid white;
+  }
 
-        img {
-          @apply group-hover:bg-gray-950/10 p-1 rounded-md;
-        }
-
-        p {
-          @apply text-sm text-white text-center px-1 rounded-md group-hover:bg-blue-500 transition-colors max-w-40;
-        }
-      }
-    }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
   }
 }
