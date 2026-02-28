@@ -159,49 +159,83 @@ const socials = [
 
 const photosLinks = [
   {
-    id: 1,
+    id: "library",
     icon: "/icons/gicon1.svg",
     title: "Library",
   },
   {
-    id: 2,
+    id: "memories",
     icon: "/icons/gicon2.svg",
     title: "Memories",
   },
   {
-    id: 3,
+    id: "places",
     icon: "/icons/file.svg",
     title: "Places",
   },
   {
-    id: 4,
+    id: "people",
     icon: "/icons/gicon4.svg",
-    title: "People",
+    title: "People & Pets",
   },
   {
-    id: 5,
+    id: "favorites",
     icon: "/icons/gicon5.svg",
     title: "Favorites",
   },
+  {
+    id: "albums",
+    title: "Albums",
+    isHeader: true,
+  },
+  {
+    id: "shared",
+    title: "Shared Albums",
+    isHeader: true,
+  },
+  {
+    id: "utilities",
+    title: "Utilities",
+    isHeader: true,
+  }
 ];
 
 const gallery = [
+  { id: 1, name: "Serene Lake", img: "/images/gal1.png", category: "Nature" },
+  { id: 2, name: "Mountain Peak", img: "/images/gal2.png", category: "Nature" },
+  { id: 3, name: "Forest Path", img: "/images/gal3.png", category: "Nature" },
+  { id: 4, name: "Evening Sky", img: "/images/gal4.png", category: "Nature" },
+  { id: 5, name: "Nike Project", img: "/images/project-1.png", category: "Projects" },
+  { id: 6, name: "AI Analyzer", img: "/images/project-2.png", category: "Projects" },
+  { id: 7, name: "Food App", img: "/images/project-3.png", category: "Projects" },
+  { id: 8, name: "Profile Main", img: "/images/adrian.jpg", category: "People" },
+  { id: 9, name: "Casual Look", img: "/images/adrian-2.jpg", category: "People" },
+  { id: 10, name: "Conference Photo", img: "/images/adrian-3.jpeg", category: "People" },
+  { id: 11, name: "Beach View", img: "/images/gal1.png", category: "Nature" },
+  { id: 12, name: "Autumn Leaves", img: "/images/gal2.png", category: "Nature" },
+  { id: 13, name: "River Side", img: "/images/gal3.png", category: "Nature" },
+  { id: 14, name: "Night Sky", img: "/images/gal4.png", category: "Nature" },
+];
+
+const albumGallery = [
   {
-    id: 1,
-    img: "/images/gal1.png",
+    id: "nature",
+    name: "Nature",
+    cover: "/images/gal1.png",
+    count: 6,
   },
   {
-    id: 2,
-    img: "/images/gal2.png",
+    id: "projects",
+    name: "Projects",
+    cover: "/images/project-1.png",
+    count: 3,
   },
   {
-    id: 3,
-    img: "/images/gal3.png",
-  },
-  {
-    id: 4,
-    img: "/images/gal4.png",
-  },
+    id: "people",
+    name: "People",
+    cover: "/images/adrian.jpg",
+    count: 3,
+  }
 ];
 
 export {
@@ -213,6 +247,7 @@ export {
   socials,
   photosLinks,
   gallery,
+  albumGallery,
 };
 
 const WORK_LOCATION = {
@@ -493,14 +528,14 @@ export const locations = {
 const INITIAL_Z_INDEX = 1000;
 
 const WINDOW_CONFIG = {
-  finder: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  safari: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+  finder: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  contact: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  resume: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  safari: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  photos: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  terminal: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  txtfile: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
+  imgfile: { isOpen: false, isMinimized: false, isMaximized: false, zIndex: INITIAL_Z_INDEX, data: null },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

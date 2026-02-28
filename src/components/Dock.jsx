@@ -3,11 +3,10 @@ import { dockApps } from '#constants/index.js'
 import { Tooltip } from 'react-tooltip'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import useWindowStore from '../../store/window.js'
+import useWindowStore from '#store/window.js'
 
 const Dock = () => {
-
-    const { openWindow, closeWindow, focusWindow, windows } = useWindowStore()
+    const { openWindow, minimizeWindow, windows } = useWindowStore()
     const dockRef = useRef(null)
 
     useGSAP(() => {
@@ -26,9 +25,9 @@ const Dock = () => {
                 const intensity = Math.exp(-(distance ** 2.5) / 20000)
 
                 gsap.to(icon, {
-                    scale: 1 + 0.25 * intensity,
-                    y: -15 * intensity,
-                    duration: 0.3,
+                    scale: 1 + 0.35 * intensity,
+                    y: -20 * intensity,
+                    duration: 0.2,
                     ease: 'power1.out'
                 })
             })
@@ -39,14 +38,14 @@ const Dock = () => {
             animateIcons(e.clientX - left)
         }
 
-        const resetIcons = () => 
-            icons.forEach((icon) => 
-            gsap.to(icons, {
-                scale: 1,
-                y: 0,
-                duration: 0.3,
-                ease: 'power1.out'
-            }),
+        const resetIcons = () =>
+            icons.forEach((icon) =>
+                gsap.to(icon, {
+                    scale: 1,
+                    y: 0,
+                    duration: 0.3,
+                    ease: 'power1.out'
+                }),
             )
 
         dock.addEventListener('mousemove', handleMouseMove)
@@ -59,21 +58,21 @@ const Dock = () => {
 
     }, [])
 
-    const tootleApp = (app) => {
-        if(!app.canOpen) return
+    const toggleApp = (app) => {
+        if (!app.canOpen) return
 
-        const Window = windows[app.id]
+        const winState = windows[app.id]
+        if (!winState) return
 
-        if(!Window) {
-            console.error(`No window found for app id: ${app.id}`)
-            return
-        } 
-
-        if (Window.isOpen) {
-                closeWindow(app.id)
+        if (winState.isOpen) {
+            if (winState.isMinimized) {
+                openWindow(app.id) // This currently unminimizes in our store logic
             } else {
-                openWindow(app.id)
+                minimizeWindow(app.id)
             }
+        } else {
+            openWindow(app.id)
+        }
     }
 
     return (
@@ -82,23 +81,24 @@ const Dock = () => {
                 {dockApps.map(({ id, name, icon, canOpen }) => (
                     <div
                         key={id}
+                        id={`dock-icon-${id}`}
                         className="relative flex justify-center"
                     >
                         <button
                             type="button"
-                            className="dock-icon"
+                            className={`dock-icon flex flex-col items-center group ${windows[id]?.isOpen ? 'open' : ''}`}
                             aria-label={name}
                             data-tooltip-id="dock-tooltip"
                             data-tooltip-content={name}
                             data-tooltip-delay-show={150}
                             disabled={!canOpen}
-                            onClick={() => tootleApp({ id, name, icon, canOpen })}
+                            onClick={() => toggleApp({ id, name, icon, canOpen })}
                         >
                             <img
                                 src={`/images/${icon}`}
                                 alt={name}
                                 loading="lazy"
-                                className={canOpen ? "" : "opacity-60"}
+                                className={canOpen ? "w-full h-full" : "w-full h-full opacity-60"}
                             />
                         </button>
                     </div>

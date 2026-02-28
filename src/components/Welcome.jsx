@@ -11,7 +11,7 @@ const renderText = (text, className, baseWeight = 400) => {
     return (
       <span
         key={i}
-        className={className}
+        className={`${className} inline-block`}
         style={{ fontVariationSettings: `"wght" ${baseWeight}` }}
       >
         {char === " " ? "\u00A0" : char}
@@ -67,7 +67,7 @@ const Welcome = () => {
 
   return (
     <section id="welcome">
-      <p ref={subtitleRef}>
+      <p ref={subtitleRef} className="whitespace-nowrap flex justify-center">
         {renderText(
           "Hey, I'm Harsha Welcome to my",
           "text-3xl font-georama",
@@ -75,8 +75,8 @@ const Welcome = () => {
         )}
       </p>
 
-      <h1 ref={titleRef} className="mt-7">
-        {renderText("Portfolio", "text-9xl italic font-georama")}
+      <h1 ref={titleRef} className="mt-7 whitespace-nowrap flex justify-center">
+        {renderText("Portfolio", "text-7xl sm:text-9xl italic font-georama")}
       </h1>
     </section>
   );
